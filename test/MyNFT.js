@@ -22,3 +22,30 @@ describe("NFT Contract", function () {
   });
 });
 
+describe("Staking Contract", function () {
+  it("Deployment", async function() {
+    Token = await ethers.getContractFactory("Staking");
+    hardhatToken = await Token.deploy(hardhatMyNFT.address);
+    expect(await hardhatToken.balanceOf(owner.address)).to.equal(1000);
+    expect(await hardhatToken.balanceOf(addr1.address)).to.equal(0);
+  });
+
+  it("Transfer", async function () {
+    Token = await ethers.getContractFactory("Staking");
+    hardhatToken = await Token.deploy(hardhatMyNFT.address);
+    await hardhatToken.transfer(addr1.address, 100);
+    expect(await hardhatToken.balanceOf(owner.address)).to.equal(900);
+    expect(await hardhatToken.balanceOf(addr1.address)).to.equal(100);
+  });
+
+  it("Stake", async function () {
+    Token = await ethers.getContractFactory("Staking");
+    hardhatToken = await Token.deploy(hardhatMyNFT.address);
+    expect(await hardhatMyNFT.ownerOf(0)).to.equal(owner.address);
+    await hardhatMyNFT.setApprovalForAll(hardhatToken.address, true)
+    //await hardhatToken.connect(addr1).stake();
+    await hardhatToken.stake(0);
+    expect(await hardhatMyNFT.ownerOf(0)).to.equal(hardhatToken.address);
+    console.log(await hardhatToken.tokenOwnerOf(0));
+  });
+});

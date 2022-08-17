@@ -23,6 +23,6 @@ contract MyNFT is ERC721 {
 
         _tokenIds.increment();
 
-        console.log("Minted!");
+        //console.log("Minted!");
     }
 }

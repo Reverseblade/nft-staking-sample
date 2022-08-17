@@ -14,6 +14,7 @@ contract Staking is ERC20, ERC721Holder, Ownable  {
 
     mapping(uint256 => address) public tokenOwnerOf;
     mapping(uint256 => uint256) public tokenStakedAt;
+    uint256 private tokenRate = 10;
 
     constructor(address _nft) ERC20("MyToken", "MTK") {
         nft = IERC721(_nft);
@@ -24,5 +25,22 @@ contract Staking is ERC20, ERC721Holder, Ownable  {
         nft.safeTransferFrom(msg.sender, address(this), tokenId);
         tokenOwnerOf[tokenId] = msg.sender;
         tokenStakedAt[tokenId] = block.timestamp;
+    }
+
+    function unstake(uint256 tokenId) external {
+        nft.safeTransferFrom(address(this), msg.sender, tokenId);
+        delete tokenOwnerOf[tokenId];
+        delete tokenStakedAt[tokenId];
+    }
+
+    function claim(uint256 tokenId) external {
+        require(tokenOwnerOf[tokenId] == msg.sender, "Not a token owner");
+        uint256 claimableAmount = _determineYield(tokenId);
+        console.log(claimableAmount);
+        _mint(msg.sender, claimableAmount);
+    }
+
+    function _determineYield(uint256 tokenId) private returns(uint256 claimableAmount) {
+        return tokenRate * (block.timestamp - tokenStakedAt[tokenId]) / 1 days;
     }
 }

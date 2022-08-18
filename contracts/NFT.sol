@@ -8,11 +8,11 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 
-contract MyNFT is ERC721 {
+contract NFT is ERC721 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    constructor() ERC721("MyNFT", "MNFT") {
+    constructor() ERC721("NFT", "NFT") {
         mintNFT();
     }
 

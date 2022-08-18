@@ -10,7 +10,7 @@ let hardhatToken;
 beforeEach(async function () {
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    myNFT = await ethers.getContractFactory("MyNFT");
+    myNFT = await ethers.getContractFactory("NFT");
     hardhatMyNFT = await myNFT.deploy();
 
     myToken = await ethers.getContractFactory("Token");
